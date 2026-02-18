@@ -1,21 +1,21 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Body } from "./components/Body.tsx";
 import { Account } from "./components/Account.tsx";
-import { Home } from "./components/Home.tsx";
+import { Feed } from "./components/Feed.tsx";
 import { Settings } from "./components/Settings.tsx";
 import { Login } from "./components/Login.tsx";
-import { Footer } from "./components/Footer.tsx";
 
 const App: React.FC = () => {
   return (
   <>
   <BrowserRouter basename="/" >
     <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element= {<Login/>} />
-      <Route path="/" element={<Body username="Soubhagya"/>} >
-       <Route path="/account" element = {<Account/>} />
-       <Route path="/home" element = {<Home/>} /> 
-       <Route path="/settings" element = {<Settings/>} />
+      <Route path="/app" element={<Body username="Soubhagya"/>} >
+       <Route path="account" element = {<Account/>} />
+       <Route path="home" element = {<Feed/>} /> 
+       <Route path="settings" element = {<Settings/>} />
     </Route> 
     </Routes>
   </BrowserRouter>

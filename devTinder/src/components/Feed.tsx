@@ -1,5 +1,5 @@
 
-export const Home:React.FC = () => {
+export const Feed:React.FC = () => {
 
     return (
         <>
