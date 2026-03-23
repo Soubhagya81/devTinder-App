@@ -1,11 +1,12 @@
 import type React from "react";
-import logo from "./public/logo.png";
+import logo from "../public/logo.png";
+import { useLocation } from "react-router";
 
-interface NavBarProps {
- username : string
-}
+interface NavBarProps {}
 
-const NavBar: React.FC<NavBarProps>= ({username}) => {
+const NavBar: React.FC<NavBarProps>= () => {
+  const { state } = useLocation();
+  const username = state?.userName || "Guest";
   return (
     <>
       <div className="navbar bg-base-300 shadow-sm">
@@ -13,11 +14,8 @@ const NavBar: React.FC<NavBarProps>= ({username}) => {
           <img className="btn btn-ghost" src={logo}></img>
         </div>
         <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Search"
-            className="input input-bordered w-24 md:w-auto"
-          />
+          
+          <p className="text-lg font-semibold ">Welcome, {username}</p>
           <div className="dropdown dropdown-end pr-4">
             <div
               tabIndex={0}

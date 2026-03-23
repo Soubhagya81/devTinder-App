@@ -58,10 +58,18 @@ export async function createUser(input: SignUpInput): Promise<User> {
 
 export async function loginUser(input: SignInInput): Promise<User> {
   const { email, password } = input;
-  const userCredential = await signInWithEmailAndPassword(auth, email, password);
-  return userCredential.user;
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    throw new Error(mapAuthError(error));
+  }
 }
 
 export async function logoutUser(): Promise<void> {
-  await signOut(auth);
+  await signOut(auth).then(() => {
+    return ("User signed out successfully.");
+  }).catch((error) => {
+    return (error);
+  });
 }

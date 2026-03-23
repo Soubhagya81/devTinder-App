@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Footer } from "./Footer";
 import { useNavigate } from "react-router";
 import { createUser, loginUser, mapAuthError } from "../services/auth";
-
 
 type FormState = {
   displayName: string;
@@ -18,18 +17,19 @@ const initialValues = {
   mobile: "",
 };
 
-export const Login : React.FC = () => {
+export const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState<Boolean>(true);
   const [form, setForm] = useState<FormState>(initialValues);
   const [error, setError] = useState<string>("");
+  const [passwordCheckError, setPasswordCheckError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleFormChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-  };  
-  
+  };
+
   const handelSumbit = async () => {
     setError("");
     setLoading(true);
@@ -48,26 +48,49 @@ export const Login : React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (!error) return;
+
+    const timer = setTimeout(() => {
+      setError("");
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [error]);
+
   const handelLogin = async () => {
     setError("");
     setLoading(true);
     try {
-      await loginUser({
+      const res = await loginUser({
         email: form.email,
         password: form.password,
       });
-       navigate("/app/home");
+
+      console.log("Logged in user:", res);
+      navigate("/app/home", { state: { userName: res.displayName } });
     } catch (err) {
       setError(mapAuthError(err));
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  const passwordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value !== form.password)
+      setPasswordCheckError("Password do not match");
+    else setPasswordCheckError("");
+  };
 
   return (
     <>
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
+          {error && (
+            <div className="alert alert-error absolute top-4">
+              <span>{error}</span>
+            </div>
+          )}
           <div className="text-center lg:text-left p-2 m-20">
             <h1 className="text-5xl font-bold mb-2">
               Find Your Perfect Dev Match
@@ -83,11 +106,6 @@ export const Login : React.FC = () => {
           </div>
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
             <div className="card-body">
-              {error && (
-                <div className="alert alert-error">
-                  <span>{error}</span>
-                </div>
-              )}
               <fieldset className="fieldset">
                 {!isLogin && (
                   <>
@@ -135,8 +153,17 @@ export const Login : React.FC = () => {
                 />
                 {!isLogin && (
                   <>
+                  { passwordCheckError &&
+                    <div role="alert" className="alert alert-error alert-soft h-3 w-60">
+                      <span className="text-error absolute">{passwordCheckError}</span>
+                    </div>
+                    }
                     <label className="label">Re-Enter Password</label>
-                    <input className="input" placeholder="Password" />
+                    <input
+                      className="input"
+                      placeholder="Password"
+                      onChange={passwordCheck}
+                    />
                   </>
                 )}
                 {isLogin && (
@@ -144,12 +171,16 @@ export const Login : React.FC = () => {
                     <div>
                       <a className="link link-hover">Forgot password?</a>
                     </div>
-                    <button 
+                    <button
                       className="btn btn-neutral mt-4"
                       onClick={() => handelLogin()}
                       disabled={loading}
                     >
-                      {loading ? <span className="loading loading-spinner"></span> : "Login"}
+                      {loading ? (
+                        <span className="loading loading-spinner"></span>
+                      ) : (
+                        "Login"
+                      )}
                     </button>
                   </>
                 )}
@@ -162,12 +193,16 @@ export const Login : React.FC = () => {
                   </button>
                 )}
                 {!isLogin && (
-                  <button 
+                  <button
                     className="btn btn-neutral mt-9"
                     onClick={handelSumbit}
                     disabled={loading}
                   >
-                    {loading ? <span className="loading loading-spinner"></span> : "Submit"}
+                    {loading ? (
+                      <span className="loading loading-spinner"></span>
+                    ) : (
+                      "Submit"
+                    )}
                   </button>
                 )}
               </fieldset>
@@ -178,4 +213,4 @@ export const Login : React.FC = () => {
       <Footer />
     </>
   );
-  };
+};

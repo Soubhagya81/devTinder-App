@@ -12,7 +12,7 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element= {<Login/>} />
-      <Route path="/app" element={<Body username="Soubhagya"/>} >
+      <Route path="/app" element={<Body/>} >
        <Route path="account" element = {<Account/>} />
        <Route path="home" element = {<Feed/>} /> 
        <Route path="settings" element = {<Settings/>} />

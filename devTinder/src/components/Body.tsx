@@ -1,16 +1,15 @@
 import { Outlet } from "react-router"
-import NavBar from "../NavBar"
+import NavBar from "./NavBar"
 import { Footer } from "./Footer"
 
 interface bodyProps {
-    username : string
 }
 
-export const Body:React.FC<bodyProps> = ({username}) => {
+export const Body:React.FC<bodyProps> = () => {
 
     return (
         <>
-        <NavBar username={username}/>
+        <NavBar/>
         <Outlet/>
         <Footer/>
         </>
