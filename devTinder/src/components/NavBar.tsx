@@ -1,12 +1,25 @@
 import type React from "react";
 import logo from "../public/logo.png";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { logoutUser } from "../services/auth";
 
 interface NavBarProps {}
 
-const NavBar: React.FC<NavBarProps>= () => {
+const NavBar: React.FC<NavBarProps> = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
+
   const username = state?.userName || "Guest";
+
+  const handelLogout = async () => {
+    try {
+      await logoutUser();
+      navigate("/login");
+    } catch (error) {
+      
+    }
+  };
+
   return (
     <>
       <div className="navbar bg-base-300 shadow-sm">
@@ -14,7 +27,6 @@ const NavBar: React.FC<NavBarProps>= () => {
           <img className="btn btn-ghost" src={logo}></img>
         </div>
         <div className="flex gap-2">
-          
           <p className="text-lg font-semibold ">Welcome, {username}</p>
           <div className="dropdown dropdown-end pr-4">
             <div
@@ -43,7 +55,7 @@ const NavBar: React.FC<NavBarProps>= () => {
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <a onClick={handelLogout}>Logout</a>
               </li>
             </ul>
           </div>

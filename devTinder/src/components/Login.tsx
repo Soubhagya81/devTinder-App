@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Footer } from "./Footer";
 import { useNavigate } from "react-router";
 import { createUser, loginUser, mapAuthError } from "../services/auth";
+import { Error } from "./Error";
 
 type FormState = {
   displayName: string;
@@ -20,8 +21,8 @@ const initialValues = {
 export const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState<Boolean>(true);
   const [form, setForm] = useState<FormState>(initialValues);
-  const [error, setError] = useState<string>("");
   const [passwordCheckError, setPasswordCheckError] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -31,7 +32,6 @@ export const Login: React.FC = () => {
   };
 
   const handelSumbit = async () => {
-    setError("");
     setLoading(true);
     try {
       await createUser({
@@ -42,24 +42,13 @@ export const Login: React.FC = () => {
       });
       navigate("/app/home");
     } catch (err) {
-      setError(mapAuthError(err));
+      setErrorMessage(mapAuthError(err));
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (!error) return;
-
-    const timer = setTimeout(() => {
-      setError("");
-    }, 2500);
-
-    return () => clearTimeout(timer);
-  }, [error]);
-
   const handelLogin = async () => {
-    setError("");
     setLoading(true);
     try {
       const res = await loginUser({
@@ -70,7 +59,9 @@ export const Login: React.FC = () => {
       console.log("Logged in user:", res);
       navigate("/app/home", { state: { userName: res.displayName } });
     } catch (err) {
-      setError(mapAuthError(err));
+      console.log("error",err, mapAuthError(err));
+      
+      setErrorMessage(mapAuthError(err));
     } finally {
       setLoading(false);
     }
@@ -86,11 +77,7 @@ export const Login: React.FC = () => {
     <>
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
-          {error && (
-            <div className="alert alert-error absolute top-4">
-              <span>{error}</span>
-            </div>
-          )}
+          {errorMessage && <Error errorMessage={errorMessage} />}
           <div className="text-center lg:text-left p-2 m-20">
             <h1 className="text-5xl font-bold mb-2">
               Find Your Perfect Dev Match
