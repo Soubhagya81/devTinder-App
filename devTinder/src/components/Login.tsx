@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Footer } from "./Footer";
 import { useNavigate } from "react-router";
 import { createUser, loginUser, mapAuthError } from "../services/auth";
 import { Error } from "./Error";
+import { ParticleNetwork } from "./ParticleNetwork";
+import background from "../public/background_wallpaper.jpg"
 
 type FormState = {
   displayName: string;
@@ -75,10 +77,14 @@ export const Login: React.FC = () => {
 
   return (
     <>
-      <div className="hero bg-base-200 min-h-screen">
+      <div className="hero min-h-screen bg-base-200"
+      style={{ backgroundImage: `url(${background})` }}
+      >
+        <ParticleNetwork />
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
           {errorMessage && <Error errorMessage={errorMessage} />}
-          <div className="text-center lg:text-left p-2 m-20">
+          <div className="text-center lg:text-left p-2 m-20 text-white">
             <h1 className="text-5xl font-bold mb-2">
               Find Your Perfect Dev Match
             </h1>
@@ -91,7 +97,7 @@ export const Login: React.FC = () => {
               projects, collaborations, startups, or learning together.
             </p>
           </div>
-          <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+          <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl bg-base-100/15 text-white">
             <div className="card-body">
               <fieldset className="fieldset">
                 {!isLogin && (
@@ -195,6 +201,7 @@ export const Login: React.FC = () => {
               </fieldset>
             </div>
           </div>
+        </div>
         </div>
       </div>
       <Footer />

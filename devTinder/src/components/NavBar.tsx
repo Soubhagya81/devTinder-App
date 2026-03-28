@@ -2,6 +2,7 @@ import type React from "react";
 import logo from "../public/logo.png";
 import { useLocation, useNavigate } from "react-router";
 import { logoutUser } from "../services/auth";
+import { Error } from "./Error";
 
 interface NavBarProps {}
 
@@ -16,7 +17,7 @@ const NavBar: React.FC<NavBarProps> = () => {
       await logoutUser();
       navigate("/login");
     } catch (error) {
-      
+      console.error("Logout failed:", error);
     }
   };
 
