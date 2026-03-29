@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Footer } from "./Footer";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { createUser, loginUser, mapAuthError } from "../services/auth";
 import { Error } from "./Error";
 import { ParticleNetwork } from "./ParticleNetwork";
@@ -57,8 +57,6 @@ export const Login: React.FC = () => {
         email: form.email,
         password: form.password,
       });
-
-      console.log("Logged in user:", res);
       navigate("/app/home", { state: { userName: res.displayName } });
     } catch (err) {
       console.log("error",err, mapAuthError(err));
@@ -97,7 +95,7 @@ export const Login: React.FC = () => {
               projects, collaborations, startups, or learning together.
             </p>
           </div>
-          <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl bg-base-100/15 text-white">
+          <div className="card w-full max-w-sm shrink-0 shadow-2xl bg-base-100/15 text-white">
             <div className="card-body">
               <fieldset className="fieldset">
                 {!isLogin && (

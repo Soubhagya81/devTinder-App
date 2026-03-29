@@ -1,8 +1,7 @@
 import type React from "react";
 import logo from "../public/logo.png";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logoutUser } from "../services/auth";
-import { Error } from "./Error";
 
 interface NavBarProps {}
 
@@ -23,7 +22,7 @@ const NavBar: React.FC<NavBarProps> = () => {
 
   return (
     <>
-      <div className="navbar bg-base-300 shadow-sm">
+      <div className="navbar bg-base-300 shadow-sm relative z-50">
         <div className="flex-1">
           <img className="btn btn-ghost" src={logo}></img>
         </div>
@@ -43,17 +42,17 @@ const NavBar: React.FC<NavBarProps> = () => {
               </div>
             </div>
             <ul
-              tabIndex={-1}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a className="justify-between">
+                <Link to="/app/profile" className="justify-between">
                   Profile
                   <span className="badge">{username}</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to="/app/settings">Settings</Link>
               </li>
               <li>
                 <a onClick={handelLogout}>Logout</a>
